@@ -1,0 +1,10 @@
+Testes Automatizados 
+
+1 - Testes unitários (Começar pela funcionalidade)
+
+2 - Testes de integração (Funcionalidade completa da nossa aplicação)
+     -> routes -> controller -> repository (IDA)
+     <- repository <- controller <- response (VOLTA)
+
+3 - Ponta a Ponta (E2E) (Testa toda a funcionalidade, toda interação do usuário com alguma funcionalidade - interação front e back)
+
