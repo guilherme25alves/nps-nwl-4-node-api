@@ -2,13 +2,21 @@ import request from 'supertest';
 import { app } from '../app';
 
 import createConnection from '../database';
+import { getConnection } from 'typeorm';
 
 describe("Surveys", async () => {
 
      beforeAll(async () => {
           const connection = await createConnection();
           await connection.runMigrations();
-     })
+     });
+
+     // Forma de dropar o banco, sem precisar configurar script no package.json após os testes
+     afterAll( async () => {
+          const connection = getConnection();
+          await connection.dropDatabase();
+          await connection.close();
+     });
 
      it("Should be able to create a new survey", async () => {
           const response =  await request(app).post("/surveys").send({

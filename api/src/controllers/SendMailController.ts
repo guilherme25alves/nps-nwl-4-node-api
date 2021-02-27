@@ -5,6 +5,7 @@ import { UsersRepository } from '../repositories/UsersRepository';
 import { SurveysRepository } from '../repositories/SurveysRepository';
 import { SurveysUsersRepository } from '../repositories/SurveysUsersRepository';
 import SendMailService from '../services/SendMailService';
+import { AppError } from '../errors/AppErrors';
 
 
 class SendMailController {
@@ -19,17 +20,19 @@ class SendMailController {
           const userAlreadyExists = await usersRepository.findOne({email});
 
           if(!userAlreadyExists) {
-               return response.status(400).json({
-                    error: "User does not exist",
-               });
+               throw new AppError("User does not exist");
+               // return response.status(400).json({
+               //      error: "User does not exist",
+               // });
           }
 
           const surveyAlreadyExists = await surveysRepository.findOne({ id: survey_id}); // Propriedade ID , valor SURVEY_ID
 
           if(!surveyAlreadyExists) {
-               return response.status(400).json({
-                    error: "Survey does not exist",
-               });
+               throw new AppError("Survey does not exist");
+               // return response.status(400).json({
+               //      error: "Survey does not exist",
+               // });
           }
 
            // Pelo fato de importamos com => export default new SendMailService => Podemos usar da forma abaixo

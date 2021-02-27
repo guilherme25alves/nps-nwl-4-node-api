@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { getCustomRepository } from 'typeorm';
 import { SurveysUsersRepository } from '../repositories/SurveysUsersRepository';
+import { AppError } from '../errors/AppErrors';
 
 class AnswerController {
 
@@ -18,9 +19,13 @@ class AnswerController {
           });
 
           if(!surveyUser) {
-               return response.status(400).json({
-                    error: "Survey User does not exist",
-               });
+               // Usando Classe customizada para geração de Exception e tratamento de erros
+               throw new AppError("Survey User does not exist");
+               
+               // Forma de Tratamento de Erro
+               // return response.status(400).json({
+               //      error: "Survey User does not exist",
+               // });
           }
 
           surveyUser.value = Number(value);

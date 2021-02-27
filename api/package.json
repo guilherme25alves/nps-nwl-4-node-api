@@ -6,8 +6,7 @@
   "scripts": {
     "dev": "ts-node-dev --transpile-only --ignore-watch node_modules src/server.ts",
     "typeorm": "ts-node-dev node_modules/typeorm/cli.js",
-    "test": "NODE_ENV=test jest",
-    "posttest": "rm ./src/database/database.test.sqlite"
+    "test": "NODE_ENV=test jest -i"
   },
   "dependencies": {
     "-": "^0.0.1",
@@ -17,6 +16,7 @@
     "D": "^1.0.0",
     "circular-json": "^0.5.9",
     "express": "^4.17.1",
+    "express-async-errors": "^3.1.1",
     "flatted": "^3.1.1",
     "handlebars": "^4.7.7",
     "nodemailer": "^6.4.18",
