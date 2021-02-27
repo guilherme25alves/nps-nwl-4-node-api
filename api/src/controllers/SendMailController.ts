@@ -6,6 +6,7 @@ import { SurveysRepository } from '../repositories/SurveysRepository';
 import { SurveysUsersRepository } from '../repositories/SurveysUsersRepository';
 import SendMailService from '../services/SendMailService';
 
+
 class SendMailController {
 
      async execute( request: Request, response: Response) {
@@ -31,26 +32,24 @@ class SendMailController {
                });
           }
 
+           // Pelo fato de importamos com => export default new SendMailService => Podemos usar da forma abaixo
+           const npsPath = resolve(__dirname, "..", "views", "emails", "npsMail.hbs");                     
+
+          const surveyUserAlreadyExists = await surveysUsersRepository.findOne({
+               where: { user_id: userAlreadyExists.id , value: null },
+               relations: ["user", "survey"] // Forma de recuperar o objeto completo, com o relacionamento, através do mapeamento nas Models
+          });
+
           const variables = {
                name: userAlreadyExists.name,
                title: surveyAlreadyExists.title,
                description: surveyAlreadyExists.description,
-               user_id: userAlreadyExists.id,
+               id: "",
                link: process.env.URL_MAIL
           };
 
-           // Pelo fato de importamos com => export default new SendMailService => Podemos usar da forma abaixo
-           const npsPath = resolve(__dirname, "..", "views", "emails", "npsMail.hbs");                     
-
-          const surveyUserAlreadyExists = surveysUsersRepository.findOne({
-               where: [
-                    { user_id: userAlreadyExists.id},
-                    { value: null }
-               ],
-               relations: ["user", "survey"] // Forma de recuperar o objeto completo, com o relacionamento, através do mapeamento nas Models
-          });
-
           if(surveyUserAlreadyExists) {
+               variables.id = surveyUserAlreadyExists.id;
                await SendMailService.execute(
                     email, 
                     surveyAlreadyExists.title,
@@ -67,6 +66,8 @@ class SendMailController {
                 survey_id 
            })
            await surveysUsersRepository.save(surveyUser);          
+
+           variables.id = surveyUser.id;
 
            await SendMailService.execute(
                 email, 
